@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\CartItem;
+use App\Entity\Product;
+use App\Repository\CartItemRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+// Ajouter l'addition de même produit dans le panier
+class ProductController extends AbstractController
+{
+    #[Route('/produit/{id}', name: 'app_product_show', methods: ['GET', 'POST'])]
+    public function show(
+        Product $product,
+        Request $request,
+        EntityManagerInterface $em,
+        CartItemRepository $cartItemRepository,
+    ): Response {
+        $user = $this->getUser();
+
+        if ($request->isMethod('POST')) {
+            if (!$user) {
+                return $this->redirectToRoute('app_login');
+            }
+
+            $quantity = max(0, (int) $request->request->get('quantity', 0));
+
+
+                $cartItem = new CartItem();
+                $cartItem->setUser($user);
+                $cartItem->setProduct($product);
+
+
+            $cartItem->setQuantity($quantity);
+            $em->persist($cartItem);
+            $em->flush();
+
+            return $this->redirectToRoute('app_cart');
+        }
+
+        return $this->render('product/show.html.twig', [
+            'product' => $product,
+        ]);
+    }
+}

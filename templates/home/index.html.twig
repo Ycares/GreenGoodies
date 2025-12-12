@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - GreenGoodies{% endblock %}
+
+{% block body %}
+  <section class="hero">
+    <h1>Bienvenue chez GreenGoodies</h1>
+    <p>Des produits responsables, livrés partout en France.</p>
+  </section>
+
+  <section class="products">
+    <h2>Nos produits</h2>
+    <div class="product-grid">
+      {% for product in products %}
+        <article class="product-card">
+          <img src="{{ product.imagePath }}" alt="{{ product.name }}">
+          <h3>{{ product.name }}</h3>
+          <p class="price">{{ product.price }} €</p>
+          <p class="short-desc">{{ product.shortDescription }}</p>
+          <a class="button" href="{{ path('app_product_show', { id: product.id }) }}">Voir le produit</a>
+        </article>
+      {% else %}
+        <p>Aucun produit pour le moment.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

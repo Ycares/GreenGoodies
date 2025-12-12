@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}GreenGoodies{% endblock %}</title>
+    <link rel="icon" href="" />
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}{% endblock %}
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="navbar-left">
+          <a href="{{ path('app_home') }}" class="logo">GreenGoodies</a>
+        </div>
+        <div class="navbar-right">
+          {% if app.user %}
+            <a href="{{ path('app_home') }}">Nos produits</a>
+            <a href="{{ path('app_cart') }}">Mon panier</a>
+            <a href="{{ path('app_account') }}">Mon compte</a>
+            <a href="{{ path('app_logout') }}">Déconnexion</a>
+          {% else %}
+            <a href="{{ path('app_login') }}">Connexion</a>
+            <a href="{{ path('app_register') }}">Inscription</a>
+          {% endif %}
+        </div>
+      </nav>
+    </header>
+
+    <main class="container">
+      {% for label, messages in app.flashes %}
+        {% for message in messages %}
+          <div class="flash flash-{{ label }}">{{ message }}</div>
+        {% endfor %}
+      {% endfor %}
+
+      {% block body %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+      © GreenGoodies - {{ "now"|date("Y") }}
+    </footer>
+  </body>
+</html>
