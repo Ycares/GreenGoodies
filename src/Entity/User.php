@@ -85,7 +85,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   }
 
   /**
-   * A visual identifier that represents this user.
    *
    * @see UserInterface
    */
@@ -131,9 +130,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this;
   }
 
-  /**
-   * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-   */
   public function __serialize(): array
   {
     $data = (array) $this;
@@ -217,7 +213,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   public function removeCustomerOrder(CustomerOrder $customerOrder): static
   {
     if ($this->customerOrders->removeElement($customerOrder)) {
-        // plus besoin de toucher à $customerOrder->setUser(null);
     }
 
     return $this;
@@ -244,7 +239,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   public function removeCartItem(CartItem $cartItem): static
   {
     if ($this->cartItems->removeElement($cartItem)) {
-      // set the owning side to null (unless already changed)
       if ($cartItem->getUser() === $this) {
         $cartItem->setUser(null);
       }

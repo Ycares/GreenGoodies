@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-// Ajouter l'addition de même produit dans le panier
 class ProductController extends AbstractController
 {
     #[Route('/produit/{id}', name: 'app_product_show', methods: ['GET', 'POST'])]
@@ -29,15 +28,10 @@ class ProductController extends AbstractController
                 return $this->redirectToRoute('app_login');
             }
 
-            $quantity = max(0, (int) $request->request->get('quantity', 0));
-
-
-                $cartItem = new CartItem();
-                $cartItem->setUser($user);
-                $cartItem->setProduct($product);
-
-
-            $cartItem->setQuantity($quantity);
+            $cartItem = new CartItem();
+            $cartItem->setUser($user);
+            $cartItem->setProduct($product);
+            $cartItem->setQuantity(1);
             $em->persist($cartItem);
             $em->flush();
 

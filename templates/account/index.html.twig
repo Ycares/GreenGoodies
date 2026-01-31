@@ -1,46 +1,97 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon compte - GreenGoodies{% endblock %}
+{% block title %}Mon compte - GreenGoodies
+{% endblock %}
+
+{% block stylesheets %}
+  <style>
+    /* Boutons maquette */
+    .btn-custom {
+      background-color: #565656;
+      border-radius: 0;
+      color: #fff;
+      transition: background-color .2s ease;
+      padding: 1.1rem 1rem;
+    }
+    .btn-custom:hover { background-color: #040404; color: #fff; }
+
+    /* Table maquette (séparateurs horizontaux, pas de bordures verticales) */
+    .orders-table thead th {
+      font-weight: 600;
+      color: #6c757d;
+      padding-bottom: .9rem;
+    }
+    .orders-table tbody td {
+      padding: 1.1rem 0;
+      vertical-align: middle;
+    }
+    .orders-table tbody tr + tr td {
+      border-top: 1px solid rgba(0,0,0,.12);
+    }
+
+    /* Largeur de la colonne (pour matcher la maquette) */
+    .account-wrap { max-width: 620px; }
+  </style>
+{% endblock %}
 
 {% block body %}
-  <section class="account">
-    <h1>Mon compte</h1>
+<section class="account py-5" style="background-color: rgb(247, 241, 237); min-height: 100vh;">
+  <div class="container">
+    <div class="mx-auto account-wrap">
 
-    <div class="account-actions">
-      <form method="post" action="{{ path('app_account_toggle_api') }}">
-        <button type="submit">
-          {{ app.user.apiEnabled ? 'Désactiver mon accès API' : 'Activer mon accès API' }}
-        </button>
-      </form>
+      <h3 class="text-center mb-4">Mon compte</h3>
 
-      <form method="post" action="{{ path('app_account_delete') }}" onsubmit="return confirm('Supprimer votre compte ? Cette action est irréversible.');">
-        <input type="hidden" name="_token" value="">
-        <button type="submit" class="danger">Supprimer mon compte</button>
-      </form>
+      <div class="bg-white p-5 mb-4">
+        <h5 class="mb-4">Mes commandes</h5>
+
+        {% if orders is empty %}
+          <p class="mb-0 text-muted">Aucune commande pour le moment.</p>
+        {% else %}
+          <table class="table table-borderless w-100 orders-table mb-0">
+            <thead>
+              <tr>
+                <th class="text-start">N°</th>
+                <th class="text-center">Date</th>
+                <th class="text-end">Prix</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+                <tr>
+                  <td class="text-start">{{ order.number }}</td>
+                  <td class="text-center">{{ order.createdAt|date('d/m/Y') }}</td>
+                  <td class="text-end fw-semibold">{{ order.total }}€</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endif %}
+      </div>
+
+      <div class="bg-white p-5 mb-4">
+        <h5 class="mb-4">Mon accès API</h5>
+
+        <form method="post" action="{{ path('app_account_toggle_api') }}">
+          <button type="submit" class="btn btn-custom w-100">
+            {{ app.user.apiEnabled ? 'Désactiver mon accès API' : 'Activer mon accès API' }}
+          </button>
+        </form>
+      </div>
+
+      <div class="bg-white p-5">
+        <form
+          method="post"
+          action="{{ path('app_account_delete') }}"
+          onsubmit="return confirm('Supprimer votre compte ? Cette action est irréversible.');"
+        >
+          <input type="hidden" name="_token" value="">
+          <button type="submit" class="btn btn-custom w-100">
+            Supprimer mon compte
+          </button>
+        </form>
+      </div>
+
     </div>
-
-    <h2>Mes commandes</h2>
-    {% if orders is empty %}
-      <p>Aucune commande pour le moment.</p>
-    {% else %}
-      <table class="orders">
-        <thead>
-          <tr>
-            <th>N°</th>
-            <th>Date</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for order in orders %}
-            <tr>
-              <td>{{ order.number }}</td>
-              <td>{{ order.createdAt|date('d/m/Y') }}</td>
-              <td>{{ order.total }} €</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% endif %}
-  </section>
+  </div>
+</section>
 {% endblock %}

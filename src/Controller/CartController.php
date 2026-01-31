@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\CustomerOrder;
 use App\Repository\CartItemRepository;
+use App\Repository\CustomerOrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,13 +20,38 @@ class CartController extends AbstractController
         $user = $this->getUser();
 
         $items = $cartItemRepository->findBy(['user' => $user]);
+
+        $groupedItems = [];
         $total = 0;
         foreach ($items as $item) {
-            $total += $item->getQuantity() * (float) $item->getProduct()->getPrice();
+            $product = $item->getProduct();
+            if (!$product) {
+                continue;
+            }
+
+            $productId = $product->getId();
+            $unitPrice = (float) $product->getPrice();
+            $quantity = $item->getQuantity();
+
+            if (!isset($groupedItems[$productId])) {
+                $groupedItems[$productId] = [
+                    'product' => $product,
+                    'quantity' => 0,
+                    'unitPrice' => $unitPrice,
+                    'lineTotal' => 0,
+                ];
+            }
+
+            $groupedItems[$productId]['quantity'] += $quantity;
+            $groupedItems[$productId]['lineTotal'] = $groupedItems[$productId]['quantity'] * $unitPrice;
+        }
+
+        foreach ($groupedItems as $groupedItem) {
+            $total += $groupedItem['lineTotal'];
         }
 
         return $this->render('cart/index.html.twig', [
-            'items' => $items,
+            'items' => $groupedItems,
             'total' => $total,
         ]);
     }
@@ -47,7 +73,11 @@ class CartController extends AbstractController
     }
 
     #[Route('/panier/valider', name: 'app_cart_validate', methods: ['POST'])]
-    public function validateCart(CartItemRepository $cartItemRepository, EntityManagerInterface $em): RedirectResponse
+    public function validateCart(
+        CartItemRepository $cartItemRepository,
+        CustomerOrderRepository $customerOrderRepository,
+        EntityManagerInterface $em
+    ): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
@@ -67,8 +97,8 @@ class CartController extends AbstractController
         $order->setUser($user);
         $order->setCreatedAt(new \DateTimeImmutable());
         $order->setTotal((string) $total);
-        // Faire un increment order pour chaque User dans entity 
-        $order->setNumber((string)($order->getId()));
+        $orderCountForUser = $customerOrderRepository->count(['user' => $user]);
+        $order->setNumber((string) ($orderCountForUser + 1));
         $em->persist($order);
 
         foreach ($items as $item) {

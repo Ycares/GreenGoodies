@@ -25,7 +25,6 @@ class SecurityController extends AbstractController
     #[Route('/deconnexion', name: 'app_logout')]
     public function logout(): void
     {
-        // Symfony intercepte cette route pour gérer la déconnexion
         throw new \LogicException('Cette méthode peut rester vide : la déconnexion est gérée par le firewall.');
     }
 }

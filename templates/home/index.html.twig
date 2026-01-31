@@ -2,26 +2,84 @@
 
 {% block title %}Accueil - GreenGoodies{% endblock %}
 
+{% block stylesheets %}
+  <style>
+    .btn-custom {
+      background-color: transparent;
+      border-radius: 0;
+      color: inherit;
+      transition: background-color 0.3s ease;
+    }
+    .btn-custom:hover {
+      background-color: #565656;
+      border-radius: 0;
+      color: white;
+    }
+  </style>
+{% endblock %}
+
 {% block body %}
-  <section class="hero">
-    <h1>Bienvenue chez GreenGoodies</h1>
-    <p>Des produits responsables, livrés partout en France.</p>
+  <section class="row g-0" style="height: 900px; overflow: hidden;">
+    <div class="col-12 col-md-6 h-100">
+      <div class="h-100 d-flex flex-column justify-content-center text-start" style="background:#e8f1e8; padding-inline: 15rem;">
+        <h1 class="display-4 fw-bold mb-4">Bienvenue</h1>
+        <p class="mb-3">Découvrez notre univers de produits durables et éthiques pour une consommation responsable</p>
+        <p>Retrouvez des articles d'hygiène & beauté, des accessoires & boissons et du prêt à porter</p>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 h-100">
+      <img src="/images/homepage.png" alt="GreenGoodies" class="w-100 h-100" style="object-fit: cover;">
+    </div>
   </section>
 
-  <section class="products">
-    <h2>Nos produits</h2>
-    <div class="product-grid">
+  <section class="container-fluid p-0 ">
+    <h2 class="px-5 m-4 text-start fw-light fs-5">NOS PRODUITS</h2>
+    <div class="row">
       {% for product in products %}
-        <article class="product-card">
-          <img src="{{ product.imagePath }}" alt="{{ product.name }}">
-          <h3>{{ product.name }}</h3>
-          <p class="price">{{ product.price }} €</p>
-          <p class="short-desc">{{ product.shortDescription }}</p>
-          <a class="button" href="{{ path('app_product_show', { id: product.id }) }}">Voir le produit</a>
-        </article>
+        <div class="col-12 col-md-6 col-lg-4 p-0">
+          <article class="card h-100 border-0 shadow-sm rounded-0">
+            <img src="/{{ product.imagePath }}" alt="{{ product.name }}" class="card-img-top rounded-0" style="object-fit: cover; height: 450px;">
+            <div class="card-body d-flex flex-column p-0">
+              <h3 class="card-title fw-bold text-center mb-2 p-2">{{ product.name }}</h3>
+              <p class="card-text text-center text-muted small mb-2 p-2 ">{{ product.shortDescription }}</p>
+              <p class="card-text fw-bold text-center mb-3 p-2">{{ product.price }} €</p>
+              <div class="d-grid">
+                <a href="{{ path('app_product_show', { id: product.id }) }}" class="btn border-0 btn-custom p-4">Voir le produit</a>
+              </div>
+            </div>
+          </article>
+        </div>
       {% else %}
-        <p>Aucun produit pour le moment.</p>
+        <p class="text-center">Aucun produit pour le moment.</p>
       {% endfor %}
+    </div>
+  </section>
+
+  <!-- Section NOTRE CONVICTION -->
+  <section class="row g-0" style="height: 700px; overflow: hidden;">
+    <div class="col-12 col-md-8 h-100">
+      <div class="h-100 d-flex flex-column justify-content-end text-start" style="background:#e8e4dc; padding-right: 30rem; padding-left: 2rem">
+        <h2 class="display-5 fw-bold mb-4">NOTRE CONVICTION</h2>
+        <p>Chez GreenGoodies, nous croyons en un monde où le commerce peut être synonyme de bien-être pour la planète et ses habitants. Notre mission est de vous proposer une sélection rigoureuse de produits qui allient qualité, durabilité et éthique</p>
+      </div>
+    </div>
+    <div class="col-12 col-md-4 h-100" style="background:#f2f0eb;">
+      <img src="/images/fleur.png" alt="GreenGoodies" class="w-100 h-100" style="object-fit: cover;">
+    </div>
+  </section>
+
+  <!-- Section NOS VALEURS -->
+  <section class="row g-0" style="height: 700px; overflow: hidden;">
+    <div class="col-12 col-md-4 h-100" style="background:#a8d8b0;">
+      <img src="/images/poubelle.png" alt="GreenGoodies" class="w-100 h-100" style="object-fit: cover;">
+    </div>
+    <div class="col-12 col-md-8 h-100">
+      <div class="h-100 d-flex flex-column justify-content-end text-start" style="background:#e8f1e8; padding-left: 30rem; padding-right: 2rem">
+        <h2 class="display-5 fw-bold mb-4">NOS VALEURS</h2>
+        <p class="m-0">Durabilité : Nous sélectionnons soigneusement des produits qui respectent l'environnement et favorisent la durabilité.</p>
+        <p class="m-0">Éthique : Nous nous engageons à travailler avec des partenaires et des fournisseurs qui partagent nos valeurs éthiques.</p>
+        <p>Écologie : Nous encourageons des pratiques respectueuses de l'écosystème et privilégions les matériaux écologiques.</p>
+      </div>
     </div>
   </section>
 {% endblock %}

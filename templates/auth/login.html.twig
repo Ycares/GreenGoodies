@@ -1,29 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}Connexion
+{% endblock %}
+
+{% block stylesheets %}
+	<style>
+		.auth-form {
+			padding: 7rem 9rem 7rem 7rem;
+		}
+		.btn-custom {
+			background-color: #565656;
+			border-radius: 0;
+			color: white;
+			transition: background-color 0.3s ease;
+		}
+		.btn-custom:hover {
+			background-color: rgb(4, 4, 4);
+			border-radius: 0;
+			color: white;
+		}
+	</style>
+{% endblock %}
 
 {% block body %}
-  <section class="auth-page">
-    <h1>Connexion</h1>
+	<section class="">
+		<div class="row g-0">
+			<div class="col-12 col-md-6">
+				<img src="/images/fleur.png" alt="" class="w-100 h-100" style="object-fit: cover; min-height: 600px;">
+			</div>
+			<div class="col-12 col-md-6 d-flex flex-column auth-form">
+				<h1 class="pb-2">Connexion</h1>
 
-    {% if has_error %}
-      <div class="alert alert-error">Identifiants incorrects</div>
-    {% endif %}
+				{% if has_error %}
+					<div class="alert alert-error">Identifiants incorrects</div>
+				{% endif %}
 
-    <form method="post">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" value="{{ last_username }}" required autocomplete="email" />
-      </div>
+				<form method="post">
+					<div class="d-flex flex-column mb-4">
+						<label for="email">Adresse email</label>
+						<input class="p-3 border-1 rounded-0" type="email" id="email" name="email" value="{{ last_username }}" required autocomplete="email"/>
+					</div>
+					<div class="d-flex flex-column mb-4">
+						<label for="password">Mot de passe</label>
+						<input class="p-3 border-1 " type="password" id="password" name="password" required autocomplete="current-password"/>
+					</div>
+					<button class="btn btn-custom w-100 py-3" type="submit">Connexion</button>
+				</form>
 
-      <div class="form-group">
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password" required autocomplete="current-password" />
-      </div>
-
-      <button type="submit">Connexion</button>
-    </form>
-
-    <p class="auth-switch">Pas encore de compte ? <a href="{{ path('app_register') }}">S'inscrire</a></p>
-  </section>
+				<a href="{{ path('app_register') }}" class="auth-switch text-center mt-4 text-decoration-underline text-body-secondary">Pas encore de compte ? S'inscrire</a>
+			</div>
+		</div>
+	</section>
 {% endblock %}

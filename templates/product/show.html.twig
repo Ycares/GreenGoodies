@@ -2,36 +2,62 @@
 
 {% block title %}{{ product.name }} - GreenGoodies{% endblock %}
 
-{% block body %}
-  <section class="product-detail">
-    <div class="product-media">
-      <img src="{{ product.imagePath }}" alt="{{ product.name }}">
-    </div>
-    <div class="product-info">
-      <h1>{{ product.name }}</h1>
-      <p class="price">{{ product.price }} €</p>
-      <p class="long-desc">{{ product.longDescription }}</p>
+{% block stylesheets %}
+  <style>
+    .btn-custom {
+      background-color: #565656;
+      border-radius: 0px;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+    .btn-custom:hover {
+      background-color:rgb(4, 4, 4);
+      border-radius: 0px;
+      color: white;
+    }
+  </style>
+{% endblock %}
 
-      <div class="add-to-cart">
-        {% if app.user %}
-          <form method="post">
-            <label for="quantity">Quantité</label>
-            <input
-              type="number"
-              id="quantity"
-              name="quantity"
-              min="0"
-              value="{{ currentQuantity ?? 1 }}"
-              required
-            />
-            <button type="submit">
-              {{ 'Ajouter au panier' }}
-            </button>
-          </form>
-        {% else %}
-          <a class="button" href="{{ path('app_login') }}">Se connecter pour commander</a>
-        {% endif %}
+{% block body %}
+<main class="container-fluid p-0">
+  <section class="row g-0">
+    <!-- Colonne gauche : Image du produit -->
+    <div class="col-12 col-md-6">
+      <img
+        src="/{{ product.imagePath }}"
+        alt="{{ product.name }}"
+        class="w-100 h-100"
+        style="object-fit: cover; min-height: 600px;"
+        loading="lazy"
+      >
+    </div>
+
+    <!-- Colonne droite : Détails du produit -->
+    <div class="col-12 col-md-6">
+      <div class="h-100 d-flex flex-column justify-content-center" style="padding-inline: 10rem; padding-top: 8rem">
+        <h1 class="fw-bold mb-3" style="font-size: 1.75rem;">{{ product.name }}</h1>
+        <p class="fw-bold mb-4" style="font-size: 2rem;">{{ product.price }} €</p>
+
+        <h2 class="text-muted small mb-3" style="font-size: 0.875rem; font-weight: normal;">Description</h2>
+        <div class="mb-4" style="line-height: 1.8;">
+          {{ product.longDescription|nl2br }}
+        </div>
+
+        <div class="mt-auto">
+          {% if app.user %}
+            <form method="post" class="w-100">
+              <button type="submit" class="btn btn-custom btn-dark w-100 h-5 py-3">
+                Ajouter au panier
+              </button>
+            </form>
+          {% else %}
+            <a class="btn btn-custom w-100 py-3" href="{{ path('app_login') }}">
+              Ajouter au panier
+            </a>
+          {% endif %}
+        </div>
       </div>
     </div>
   </section>
+</main>
 {% endblock %}

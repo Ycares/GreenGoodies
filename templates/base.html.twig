@@ -2,32 +2,42 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}GreenGoodies{% endblock %}</title>
     <link rel="icon" href="" />
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     {% block stylesheets %}{% endblock %}
     {% block javascripts %}{% endblock %}
   </head>
   <body>
-    <header>
-      <nav class="navbar">
-        <div class="navbar-left">
-          <a href="{{ path('app_home') }}" class="logo">GreenGoodies</a>
-        </div>
-        <div class="navbar-right">
-          {% if app.user %}
-            <a href="{{ path('app_home') }}">Nos produits</a>
-            <a href="{{ path('app_cart') }}">Mon panier</a>
-            <a href="{{ path('app_account') }}">Mon compte</a>
-            <a href="{{ path('app_logout') }}">Déconnexion</a>
-          {% else %}
-            <a href="{{ path('app_login') }}">Connexion</a>
-            <a href="{{ path('app_register') }}">Inscription</a>
-          {% endif %}
+    <header class="bg-white m-2 px-5">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid py-2">
+          <a href="{{ path('app_home') }}" class="navbar-brand fw-semibold">
+            <img src="/images/logo.png" alt="GreenGoodies" />
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              {% if app.user %}
+                <li class="nav-item px-2"><a href="{{ path('app_home') }}" class="nav-link">Nos produits </a></li>
+                <li class="nav-item px-2"><a href="{{ path('app_cart') }}" class="nav-link">Mon panier</a></li>
+                <li class="nav-item px-2"><a href="{{ path('app_account') }}" class="nav-link">Mon compte</a></li>
+                <li class="nav-item px-2"><a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a></li>
+              {% else %}
+                <li class="nav-item px-2"><a href="{{ path('app_login') }}" class="nav-link">Connexion</a></li>
+                <li class="nav-item px-2"><a href="{{ path('app_register') }}" class="nav-link">Inscription</a></li>
+              {% endif %}
+            </ul>
+          </div>
         </div>
       </nav>
     </header>
 
-    <main class="container">
+    <main class="container-fluid p-0">
       {% for label, messages in app.flashes %}
         {% for message in messages %}
           <div class="flash flash-{{ label }}">{{ message }}</div>
@@ -40,5 +50,6 @@
     <footer class="footer">
       © GreenGoodies - {{ "now"|date("Y") }}
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   </body>
 </html>
